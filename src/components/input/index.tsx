@@ -28,6 +28,9 @@ const StyledInput = withStyles({
     "& label": {
       color: `${COLORS.TITLE_GRAY}`,
     },
+    "& input.Mui-disabled": {
+      color: `${COLORS.TITLE_GRAY}`,
+    },
     "& .MuiFilledInput-underline:after": {
       borderBottomColor: `${COLORS.MAIN}`,
     },

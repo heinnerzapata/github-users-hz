@@ -1,25 +1,31 @@
 import React from "react";
-import { ModalForm } from "components";
+import { ModalForm, UserInfo } from "components";
 import { Cookies } from "react-cookie";
+import { IGitHubUser } from "models";
 
 interface IGitHubUserProps {
   cookies: Cookies;
 }
 
-class GitHubUser extends React.PureComponent<IGitHubUserProps> {
+interface IGitHubUserState {
+  gitHubUser: IGitHubUser;
+}
+
+class GitHubUser extends React.PureComponent<
+  IGitHubUserProps,
+  IGitHubUserState
+> {
+  state = {
+    gitHubUser: this.props.cookies.get("githubUser"),
+  };
+
   render() {
     return (
       <React.Fragment>
-        <h1>
-          GitHUb User
-          {this.props.cookies.get("githubUser") && (
-            <React.Fragment>
-              {this.props.cookies.get("githubUser").name} -{" "}
-              {this.props.cookies.get("githubUser").lastName}
-            </React.Fragment>
-          )}
-        </h1>
-        <ModalForm />
+        {this.state.gitHubUser && (
+          <UserInfo gitHubUser={this.state.gitHubUser} />
+        )}
+        {!this.state.gitHubUser && <ModalForm />}
       </React.Fragment>
     );
   }

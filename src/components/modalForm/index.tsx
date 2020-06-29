@@ -13,6 +13,7 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useCookies } from "react-cookie";
+import API from "utils/API";
 
 const numericRegExp = /^^[0-9]*$/;
 
@@ -33,6 +34,17 @@ const githubUserModalForm = Yup.object().shape({
     .min(2, "Too Short!")
     .max(50, "Too Long!")
     .required("Required"),
+  // .test("userGitHubExist", "User does not exist", async (value) => {
+  //   //api.github.com/users/{username}
+  //   try {
+  //     await API.get(`https://api.github.com/users/${value}`);
+  //     debugger;
+  //     return true;
+  //   } catch (error) {
+  //     debugger;
+  //     return false;
+  //   }
+  // }),
 });
 
 interface IModalFormProps {}
@@ -43,6 +55,20 @@ const ModalForm: React.SFC<IModalFormProps> = (props) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const submitHandler = async (
+    setSubmitting: (value: boolean) => void,
+    values: any
+  ) => {
+    setSubmitting(true);
+    try {
+      await API.get(`https://api.github.com/users/${values.email}`);
+    } finally {
+      setCookie("githubUser", values, { path: "/" });
+      setSubmitting(false);
+      setOpen(false);
+    }
   };
 
   const getFormBody = () => {
@@ -60,12 +86,7 @@ const ModalForm: React.SFC<IModalFormProps> = (props) => {
             }}
             validationSchema={githubUserModalForm}
             onSubmit={(values, { setSubmitting }) => {
-              setSubmitting(true);
-              setTimeout(() => {
-                setCookie("githubUser", values, { path: "/" });
-                setSubmitting(false);
-                setOpen(false);
-              }, 2000);
+              submitHandler(setSubmitting, values);
             }}
           >
             {({
