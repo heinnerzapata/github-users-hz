@@ -1,0 +1,18 @@
+
+  input {
+    background-color: #2d2d2d;
+    height: 43px;
+    width: 100%;
+    outline: none;
+    color: white;
+    padding: 5px;
+    border: solid 1px #AAA5A0;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+
+    @media (max-width: 1300px) {
+      margin-bottom: 20px;
+    }
+
+}
