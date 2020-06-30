@@ -4,6 +4,7 @@ import styles from "./modalForm.module.scss";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { Grid, Row, Col } from "react-flexbox-grid";
+import { IGitHubUser } from "models";
 import {
   Input,
   DatePickerControl,
@@ -47,27 +48,49 @@ const githubUserModalForm = Yup.object().shape({
   // }),
 });
 
-interface IModalFormProps {}
+interface IModalFormProps {
+  userInfo: IGitHubUser | null;
+  setUserInfo: (userInfo: IGitHubUser) => void;
+}
 
 const ModalForm: React.SFC<IModalFormProps> = (props) => {
   const [open, setOpen] = React.useState(false);
-  const [cookies, setCookie] = useCookies(["name"]);
+  const [alertUser, setAlertUser] = React.useState(false);
+  const [cookies, setCookie] = useCookies(["githubUser"]);
 
   const handleClose = () => {
+    if (props.userInfo === null) return;
     setOpen(false);
   };
 
   const submitHandler = async (
     setSubmitting: (value: boolean) => void,
-    values: any
+    resetForm: (values: any) => void,
+    values: IGitHubUser
   ) => {
     setSubmitting(true);
     try {
-      await API.get(`https://api.github.com/users/${values.email}`);
-    } finally {
-      setCookie("githubUser", values, { path: "/" });
+      const user = await API.get(
+        `https://api.github.com/users/${values.gitUser}`
+      );
+
+      let valuesToSave = user.data
+        ? { ...values, avatar: user.data.avatar_url }
+        : values;
+
+      setCookie("githubUser", valuesToSave, { path: "/" });
+      props.setUserInfo(valuesToSave);
       setSubmitting(false);
       setOpen(false);
+    } catch (err) {
+      setAlertUser(true);
+      setSubmitting(false);
+      resetForm({});
+    } finally {
+      // setCookie("githubUser", values, { path: "/" });
+      // props.setUserInfo(values);
+      // setSubmitting(false);
+      // setOpen(false);
     }
   };
 
@@ -85,8 +108,8 @@ const ModalForm: React.SFC<IModalFormProps> = (props) => {
               date: new Date(),
             }}
             validationSchema={githubUserModalForm}
-            onSubmit={(values, { setSubmitting }) => {
-              submitHandler(setSubmitting, values);
+            onSubmit={(values, { setSubmitting, resetForm }) => {
+              submitHandler(setSubmitting, resetForm, values);
             }}
           >
             {({
@@ -181,7 +204,7 @@ const ModalForm: React.SFC<IModalFormProps> = (props) => {
                           type="text"
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          value={values.gitUser}
+                          value={values.gitUser || ""}
                           label="Git Username"
                           errorText={
                             errors.gitUser !== undefined && touched.gitUser
@@ -219,22 +242,36 @@ const ModalForm: React.SFC<IModalFormProps> = (props) => {
                         />
                       </Col>
                     </Row>
-                    <Row center="xs">
+                    {alertUser && (
+                      <Row>
+                        <Col xs={12}>
+                          <div className={styles.alert}>
+                            it seems GitHub User does not exist !!
+                          </div>
+                        </Col>
+                      </Row>
+                    )}
+                    <Row
+                      className={isSubmitting ? styles.hidden : ""}
+                      center="xs"
+                    >
                       <Col xs={12}>
-                        {!isSubmitting && (
-                          <ButtonControl
-                            disabled={
-                              Object.keys(errors).length !== 0 ||
-                              Object.keys(touched).length === 0 ||
-                              isSubmitting
-                            }
-                            type="submit"
-                            onClick={() => {}}
-                          >
-                            Save
-                          </ButtonControl>
-                        )}
-                        {isSubmitting && <LinearLoader />}
+                        <ButtonControl
+                          disabled={
+                            Object.keys(errors).length !== 0 ||
+                            Object.keys(touched).length === 0 ||
+                            isSubmitting
+                          }
+                          type="submit"
+                          onClick={() => {}}
+                        >
+                          Save
+                        </ButtonControl>
+                      </Col>
+                    </Row>
+                    <Row className={!isSubmitting ? styles.hidden : ""}>
+                      <Col xs={12}>
+                        <LinearLoader />
                       </Col>
                     </Row>
                   </Grid>

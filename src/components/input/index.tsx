@@ -72,6 +72,7 @@ const Input: React.SFC<IInputProps> = (props) => {
       helperText={props.errorText}
       variant="outlined"
       type={props.type}
+      autoComplete="off"
     />
   );
 };

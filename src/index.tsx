@@ -5,11 +5,20 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { CookiesProvider } from "react-cookie";
 
+import store from "./store";
+
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+
 ReactDOM.render(
   <React.StrictMode>
-    <CookiesProvider>
-      <App />
-    </CookiesProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <CookiesProvider>
+          <App />
+        </CookiesProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

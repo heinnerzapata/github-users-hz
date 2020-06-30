@@ -15,6 +15,7 @@ const DatePickerControl: React.SFC<IDatePickerProps> = (props) => {
     <DatePicker
       className={styles.datePicker}
       selected={props.value}
+      popperPlacement={"right-end"}
       disabled={props.disabled}
       onChange={(val: any) => {
         props.onChangeDate(props.name, val);

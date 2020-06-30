@@ -4,6 +4,7 @@ import DatePickerControl from "components/datePicker";
 import ButtonControl from "components/button";
 import LinearLoader from "components/linearLoader";
 import UserInfo from "components/userInfo";
+import ReposTable from "components/table";
 
 export {
   ModalForm,
@@ -12,4 +13,5 @@ export {
   ButtonControl,
   LinearLoader,
   UserInfo,
+  ReposTable,
 };

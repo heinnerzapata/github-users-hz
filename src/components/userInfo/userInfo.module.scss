@@ -3,6 +3,36 @@
   left: 0;
   top: 0;
   right: 0;
-  border: solid 1px red;
-  background-color: #FFCC00;
+  color: white;
+  background-color: black;
+  padding: 15px;
+  z-index: 1000;
+
+  .tag {
+    margin-right: 5px;
+    color: #FFCC00;
+    font-size: 12px;
+    margin-left: 20px;
+    font-weight: bold;
+  }
+
+  .value {
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  .avatar {
+    position: fixed;
+    height: 140px;
+    width: 140px;
+    left: calc(50% - 70px);
+    border-radius: 50%;
+    margin: 20px;
+    margin-top: 20px;
+    background-color: black;
+
+    @media (max-width: 1400px) {
+      display: none;
+    }
+  }
 }

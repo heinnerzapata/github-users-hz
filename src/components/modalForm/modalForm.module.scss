@@ -8,12 +8,29 @@
   transform: translate(-50%, -50%);
   padding: 10px;
 
+  .hidden {
+    visibility: hidden;
+  }
+
   .formBody {
-    color:  #FFCC00;
+    color: #FFCC00;
 
     .title {
       width: 100%;
       text-align: center;
+      color: white;
+    }
+
+    .alert {
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px;
+      border-color: #F3072F;
+      background-color: #F30768;
+      border-radius: 4px;
     }
   }
 
