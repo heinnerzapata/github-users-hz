@@ -53,7 +53,7 @@ const UserInfo: React.SFC<IUserInfoProps> = (props) => {
                 <span className={styles.value}>{props.userInfo.id}</span>
               </Col>
               <Col>
-                <span className={styles.tag}>Bird Date:</span>{" "}
+                <span className={styles.tag}>Date of birth:</span>{" "}
                 <span className={styles.value}>
                   {moment(props.userInfo.date).format("YYYY-MM-DD")}
                 </span>
